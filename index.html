@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <script
+         src="https://kit.fontawesome.com/627451f967.js"
+         crossorigin="anonymous"></script>
+      <link
+         rel="stylesheet"
+         href="https://bootswatch.com/5/cosmo/bootstrap.min.css" />
+      <title>Team Builder App</title>
+      <script src="app.js" defer></script>
+   </head>
+   <body>
+      <div class="container mt-4">
+         <h1 class="display-4 text-center">
+            <i class="fa-solid fa-football text-danger text-opacity-75"></i>
+            &nbspTeam Builder App&nbsp
+            <i class="fa-solid fa-basketball text-danger text-opacity-75"></i>
+         </h1>
+
+         <!-- FORMS -->
+         <!-- TEAM FORM -->
+         <!-- ALERT DIV DISPLAYS HERE -->
+         <form id="team-form" class="border p-3 shadow-lg mt-1 mb-3">
+            <fieldset id="team-form-toggle">
+               <div class="form-group mt-2">
+                  <label for="team-name">Team Name</label>
+                  <input
+                     type="text"
+                     id="team-name"
+                     class="form-control shadow-sm" />
+               </div>
+               <div class="d-grid gap-2">
+                  <input
+                     type="submit"
+                     value="Add New Team"
+                     class="btn btn-primary mt-2" />
+               </div>
+            </fieldset>
+         </form>
+
+         <!-- PLAYER FORM -->
+         <!-- ALERT DIV DISPLAYS HERE -->
+         <form id="player-form" class="border p-3 shadow-lg mt-1">
+            <fieldset id="player-form-toggle">
+               <div class="form-group mt-2">
+                  <label for="player-name">Player Name</label>
+                  <input
+                     type="text"
+                     id="player-name"
+                     class="form-control shadow-sm" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="player-position">Player Position</label>
+                  <input
+                     type="text"
+                     id="player-position"
+                     class="form-control shadow-sm" />
+               </div>
+
+               <!-- TEAM SELECTOR -->
+               <div class="form-group mt-2">
+                  <label for="team-selector">Select Team</label>
+                  <select
+                     type="text"
+                     id="team-selector"
+                     class="form-control shadow-sm">
+                     <!-- <option value="Option 1">Option 1</option>
+                  <option value="Option 2">Option 2</option>
+                  <option value="Option 3">Option 3</option> -->
+                  </select>
+               </div>
+               <div class="d-grid gap-2">
+                  <input
+                     id="button-add"
+                     type="submit"
+                     value="Add New Player"
+                     class="btn btn-primary mt-2 btn-player-add" />
+               </div>
+            </fieldset>
+         </form>
+
+         <!-- TABLE DISPLAY -->
+         <div class="d-flex mt-3">
+            <table class="table table-striped ms-0 me-0 border shadow-lg">
+               <thead>
+                  <tr>
+                     <th>Team</th>
+                     <th>Name</th>
+                     <th>Position</th>
+                     <th></th>
+                     <th></th>
+                  </tr>
+               </thead>
+               <tbody id="player-list">
+                  <!-- TABLE ROWS DISPLAY HERE -->
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

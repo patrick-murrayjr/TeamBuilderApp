@@ -39,15 +39,7 @@ class UI {
    static displayPlayerAndTeams() {
       console.log('UI.displayPlayerAndTeams called');
       let teamList = DataStorage.getTeams();
-      let playerList = DataStorage.getPlayers().sort((a, b) => {
-         if (a.teamName < b.teamName) {
-            return -1;
-         }
-         if (a.teamName > b.teamName) {
-            return 1;
-         }
-         return 0;
-      });
+      let playerList = DataStorage.getPlayers();
 
       // Populate player list and team dropdown
       teamList.forEach(team => UI.addTeamToDropdown(team));
@@ -290,6 +282,7 @@ class DataStorage {
 
    static searchForMatchingPlayer(searchItem, players) {
       console.log(`DataStorage.searchForMatchingPlayer called`);
+      console.log(players);
       // returns index of matching player if found, -1 if not found
       let result = -1;
       players.forEach((player, i) => {
@@ -300,6 +293,22 @@ class DataStorage {
             searchItem.teamName === player.teamName
          ) {
             console.log(`index of found player: ${i}`);
+            result = i;
+         }
+      });
+      return result;
+   }
+
+   static searchForMatchingTeam(searchItem, teams) {
+      console.log(`DataStorage.searchForMatchingTeam called`);
+      // returns index of matching team if found, -1 if not found
+      let result = -1;
+      teams.forEach((team, i) => {
+         if (
+            // item found
+            searchItem.teamName === team.teamName
+         ) {
+            console.log(`index of found team: ${i}`);
             result = i;
          }
       });
@@ -366,18 +375,22 @@ document.querySelector('#team-form').addEventListener('submit', e => {
       const team = new Team(teamName);
 
       //TODO - Check to make sure that team does not already exist
+      if (DataStorage.searchForMatchingTeam(team, DataStorage.getTeams()) < 0) {
+         // Add Team to UI
+         UI.addTeamToDropdown(team);
 
-      // Add Team to UI
-      UI.addTeamToDropdown(team);
+         //Add book to local storage
+         DataStorage.addTeam(team);
 
-      //Add book to local storage
-      DataStorage.addTeam(team);
+         // Alert user of success
+         UI.showTeamAlert(`${teamName} added`, 'success', 1800);
 
-      // Alert user of success
-      UI.showTeamAlert(`${teamName} added`, 'success', 1800);
-
-      //clear fields
-      UI.clearTeamFields();
+         //clear fields
+         UI.clearTeamFields();
+      } else {
+         UI.showTeamAlert(`${team.teamName} already exists.`, 'danger', 1800);
+         UI.clearTeamFields();
+      }
    }
 });
 
@@ -406,21 +419,34 @@ document.querySelector('#player-form').addEventListener('submit', e => {
    } else {
       let button = document.querySelector('#button-add');
       if (button.classList.contains('btn-player-add')) {
-         // Add Player to UI
-         UI.addPlayerToList(player);
+         if (
+            DataStorage.searchForMatchingPlayer(
+               player,
+               DataStorage.getPlayers()
+            ) < 0
+         ) {
+            // Add Player to UI
+            UI.addPlayerToList(player);
 
-         // Add player to local storage
-         DataStorage.addPlayer(player);
+            // Add player to local storage
+            DataStorage.addPlayer(player);
 
-         // Alert user of success
-         UI.showPlayerAlert(
-            `${player.playerName} has been added to the ${player.teamName}.`,
-            'success',
-            1800
-         );
+            // Alert user of success
+            UI.showPlayerAlert(
+               `${player.playerName} has been added to the ${player.teamName}.`,
+               'success',
+               1800
+            );
 
-         // Clear fields
-         UI.clearPlayerFields();
+            // Clear fields
+            UI.clearPlayerFields();
+         } else {
+            UI.showPlayerAlert(
+               `${player.playerName} already exists in ${player.teamName}.`,
+               'danger',
+               1800
+            );
+         }
       }
       if (button.classList.contains('btn-player-edit')) {
          console.log('btn-player-edit is WORKING');
@@ -442,9 +468,6 @@ document.querySelector('#player-form').addEventListener('submit', e => {
             1800
          );
          UI.clearPlayerFields();
-         //FIXME -
-         // delete all players from List and rebuild list
-         // UI.deletePlayer(e.target);
          UI.toggleAddEditButton();
       }
    }
@@ -454,7 +477,6 @@ document.querySelector('#player-form').addEventListener('submit', e => {
 // Event: Edit Team
 // TODO - Maybe code edit teams ???
 // Event: Edit Player
-// TODO - Edit Players Event
 document.querySelector('#player-list').addEventListener('click', e => {
    console.log(`Edit Player Event Listener called`);
    e.preventDefault();
@@ -479,7 +501,7 @@ document.querySelector('#player-list').addEventListener('click', e => {
    }
 });
 // Event: Remove Team
-// TODO - Maybe...
+// TODO - Maybe...code Remove Team
 
 // Event: Remove Player
 document.querySelector('#player-list').addEventListener('click', e => {
